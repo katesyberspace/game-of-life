@@ -1,5 +1,5 @@
 package game
 
-func greet() string{
+func game() string{
 	return "Pree"
 }

@@ -6,6 +6,6 @@ import (
 )
 
 func TestGame(t *testing.T){
-	name := greet()
+	name := game()
 	assert.Equal(t, "Pree",name)
 }
