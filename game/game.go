@@ -59,6 +59,44 @@ func getNumNeighors(h, w, y, x int, grid [][]int) (numNeighbors int) {
 
 */
 
+// applies the Game of Life rules, to determine if cell should survive
+func survives(alive bool, numNeighbors int) bool {
+	return (alive && (2 <= numNeighbors || numNeighbors <= 3)) || (!alive && numNeighbors == 3)
+}
+
+func hasEvolved(seeds, nextGenSeeds [][2]int) bool {
+	if len(seeds) != len(nextGenSeeds) {
+		return true
+	}
+	for i, seed := range seeds {
+		if nextGenSeeds[i] != seed {
+			return true
+		}
+	}
+	return false
+}
+
+func run(h, w int, seeds, nextGenSeeds [][2]int) {
+	// for len(seeds) > 0 || hasEvolved(seeds, nextGenSeeds) {
+	grid := createGrid(h, w, seeds)
+
+	for y, row := range grid {
+		for x := range row {
+			alive := isAlive(y, x, grid)
+			numNeighbors := getNumNeighors(h, w, y, x, grid)
+			if survives(alive, numNeighbors) {
+				nextGenSeeds = append(nextGenSeeds, [2]int{y, x})
+			}
+		}
+	}
+
+	grid = createGrid(h, w, nextGenSeeds)
+	fmt.Println(grid)
+	// seeds, nextGenSeeds = nextGenSeeds, seeds
+	// }
+
+}
+
 func game() string {
 	var (
 		h, w  int
@@ -66,22 +104,10 @@ func game() string {
 	)
 	h, w = 4, 8
 	seeds = [][2]int{{1, 4}, {2, 3}, {2, 4}}
-
 	nextGenSeeds := [][2]int{}
-	grid := createGrid(h, w, seeds)
 
-	for y, row := range grid {
-		for x := range row {
-			alive := isAlive(y, x, grid)
-			numNeighbors := getNumNeighors(h, w, y, x, grid)
-			if (alive && (2 <= numNeighbors || numNeighbors <= 3)) || (!alive && numNeighbors == 3) {
-				nextGenSeeds = append(nextGenSeeds, [2]int{y, x})
-			}
-		}
-	}
+	run(h, w, seeds, nextGenSeeds)
 
-	grid = createGrid(h, w, nextGenSeeds)
-
-	return fmt.Sprintf("%v", grid)
+	return "pree"
 
 }
