@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -100,7 +102,7 @@ func (g *Game) run() string {
 }
 
 func main() {
-	// reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(os.Stdin)
 	// fmt.Print("enter grid size: ")
 	// gridSize, err := reader.ReadString('\n')
 	// if err != nil {
@@ -123,7 +125,8 @@ func main() {
 
 	g := NewGame(h, w, seeds)
 
-	for i := 0; i < 20; i++ {
+	for {
+		reader.ReadByte()
 		fmt.Print(g.run())
 	}
 }
