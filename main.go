@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -51,9 +52,9 @@ func (g *Game) printGrid() string {
 }
 
 type Game struct {
-	grid  [][]int
-	h, w  int
-	seeds [][2]int
+	grid                [][]int
+	h, w                int
+	seeds, prevGenSeeds [][2]int
 }
 
 func NewGame(h, w int, seeds [][2]int) *Game {
@@ -120,13 +121,32 @@ func main() {
 		h, w  int
 		seeds [][2]int
 	)
-	h, w = 20, 20
-	seeds = [][2]int{{2, 4}, {1, 3}, {3, 4}, {4, 4}}
+	h, w = 30, 30
+	seeds = [][2]int{{3, 4}, {4, 4}, {5, 4}, {16, 15}, {15, 14}}
 
 	g := NewGame(h, w, seeds)
-
 	for {
+		if len(g.seeds) == 0 || !g.hasEvolved() {
+			break
+		}
 		reader.ReadByte()
 		fmt.Print(g.run())
+		g.prevGenSeeds = g.seeds
 	}
+	fmt.Println("Game Over")
+}
+
+func (g *Game) hasEvolved() bool {
+	if len(g.seeds) != len(g.prevGenSeeds) {
+		return true
+	}
+	sort.Slice(g.seeds, func(i, j int) bool { return g.seeds[i][0] < g.seeds[j][0] })
+	sort.Slice(g.prevGenSeeds, func(i, j int) bool { return g.prevGenSeeds[i][0] < g.prevGenSeeds[j][0] })
+
+	for i := range g.seeds {
+		if g.seeds[i] != g.prevGenSeeds[i] {
+			return true
+		}
+	}
+	return false
 }
