@@ -7,25 +7,18 @@ import (
 )
 
 func TestNewGameSuccess(t *testing.T) {
-	h, w := 5, 5
-	seeds := [][2]int{
-		{1, 2},
-		{2, 3},
-	}
-	g, err := NewGame(h, w, seeds)
+	h, w, ns := 5, 5, 15
+	g, err := NewGame(h, w, ns)
 	assert.Equal(t, h, g.h)
 	assert.Equal(t, w, g.w)
-	assert.Equal(t, seeds, g.seeds)
+	assert.Equal(t, ns, len(g.seeds))
 	assert.Nil(t, err)
 }
 
 func TestNewGameFail(t *testing.T) {
-	h, w := 1, 1
-	seeds := [][2]int{
-		{1, 2},
-		{2, 3},
-	}
-	_, err := NewGame(h, w, seeds)
+	h, w, ns := 1, 1, 3
+
+	_, err := NewGame(h, w, ns)
 	assert.NotNil(t, err)
 }
 
@@ -48,9 +41,14 @@ var tests = []struct {
 	},
 }
 
-func TestFind(t *testing.T) {
+func TestRun(t *testing.T) {
 	for _, e := range tests {
-		g, _ := NewGame(e.h, e.w, e.seeds)
+		g := &Game{
+			h:     e.h,
+			w:     e.w,
+			seeds: e.seeds,
+			grid:  createGrid(e.h, e.w, e.seeds),
+		}
 		res := g.Run()
 		assert.Equal(t, e.exp, res)
 	}

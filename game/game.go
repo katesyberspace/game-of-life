@@ -2,8 +2,10 @@ package game
 
 import (
 	"fmt"
+	"math/rand"
 	"sort"
 	"strings"
+	"time"
 )
 
 const (
@@ -18,39 +20,40 @@ type Game struct {
 	seeds, prevGenSeeds [][2]int
 }
 
-// ValidInputs checks the h, w and seeds provided
-// must be greater than 0, and seeds within h,w boarder
-func validInputs(h, w int, seeds [][2]int) bool {
-	if h < 0 || w < 0 {
-		return false
-	}
-	for _, s := range seeds {
-		if s[0] < 0 || s[0] >= h ||
-			s[1] < 0 || s[1] >= w {
-			return false
-		}
-	}
-	return true
-}
-
 // NewGame returns a new instance of Game with
 // the first gen grid created
-func NewGame(h, w int, seeds [][2]int) (*Game, error) {
-	if !validInputs(h, w, seeds) {
-		return nil, fmt.Errorf("invalid inputs h:%d, w:%d, seeds:%v", h, w, seeds)
+func NewGame(h, w, numSeeds int) (*Game, error) {
+	if !validInputs(h, w, numSeeds) {
+		return nil, fmt.Errorf("invalid inputs h:%d, w:%d, numSeeds:%d", h, w, numSeeds)
 	}
+	seeds := createSeeds(h, w, numSeeds)
 	g := &Game{
 		h:     h,
 		w:     w,
 		seeds: seeds,
+		grid:  createGrid(h, w, seeds),
 	}
 
-	g.createGrid()
 	return g, nil
 }
 
+// ValidInputs checks the h, w and seeds provided
+// must be greater than 0, and seeds within h,w boarder
+func validInputs(h, w, numSeeds int) bool {
+	return h > 0 && w > 0 && numSeeds > 0 && (numSeeds <= h*w)
+}
+
+func createSeeds(h, w, numSeeds int) [][2]int {
+	seeds := make([][2]int, numSeeds)
+	rand.Seed(time.Now().Unix())
+	for i := 0; i < numSeeds; i++ {
+		seeds[i] = [2]int{rand.Intn(h), rand.Intn(w)}
+	}
+	return seeds
+}
+
 // Run is the function that runs all game logic
-// and creates the grid for the next generation
+// and prints the updated grid
 func (g *Game) Run() string {
 	g.prevGenSeeds = g.seeds
 	g.seeds = nil
@@ -63,26 +66,25 @@ func (g *Game) Run() string {
 			}
 		}
 	}
-	return g.createGrid()
+	g.grid = createGrid(g.h, g.w, g.seeds)
+	return g.printGrid()
 }
 
 //creates the grid as a 2D array from h,w and seeds coordinates
 //and returns the string formatted grid
-func (g *Game) createGrid() string {
-	grid := make([][]int, g.h)
+func createGrid(h, w int, seeds [][2]int) [][]int {
+	grid := make([][]int, h)
 	for i, row := range grid {
-		grid[i] = make([]int, g.w)
+		grid[i] = make([]int, w)
 		for j := range row {
 			grid[i][j] = DEAD
 		}
 	}
-
-	for _, seed := range g.seeds {
+	for _, seed := range seeds {
 		grid[seed[0]][seed[1]] = ALIVE
 	}
 
-	g.grid = grid
-	return g.printGrid()
+	return grid
 }
 
 // returns whether cell at y,x coordinate in grid is alive
