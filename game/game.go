@@ -17,6 +17,21 @@ type Game struct {
 	seeds, prevGenSeeds [][2]int
 }
 
+// ValidInputs checks the h, w and seeds provided
+// must be greater than 0, and seeds within h,w boarder
+func ValidInputs(h, w int, seeds [][2]int) bool {
+	if h < 0 || w < 0 {
+		return false
+	}
+	for _, s := range seeds {
+		if s[0] < 0 || s[0] >= h ||
+			s[1] < 0 || s[1] >= w {
+			return false
+		}
+	}
+	return true
+}
+
 // NewGame returns a new instance of Game with
 // the first gen grid created
 func NewGame(h, w int, seeds [][2]int) *Game {
