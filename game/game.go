@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -19,7 +20,7 @@ type Game struct {
 
 // ValidInputs checks the h, w and seeds provided
 // must be greater than 0, and seeds within h,w boarder
-func ValidInputs(h, w int, seeds [][2]int) bool {
+func validInputs(h, w int, seeds [][2]int) bool {
 	if h < 0 || w < 0 {
 		return false
 	}
@@ -34,7 +35,10 @@ func ValidInputs(h, w int, seeds [][2]int) bool {
 
 // NewGame returns a new instance of Game with
 // the first gen grid created
-func NewGame(h, w int, seeds [][2]int) *Game {
+func NewGame(h, w int, seeds [][2]int) (*Game, error) {
+	if !validInputs(h, w, seeds) {
+		return nil, fmt.Errorf("invalid inputs h:%d, w:%d, seeds:%v", h, w, seeds)
+	}
 	g := &Game{
 		h:     h,
 		w:     w,
@@ -42,7 +46,7 @@ func NewGame(h, w int, seeds [][2]int) *Game {
 	}
 
 	g.createGrid()
-	return g
+	return g, nil
 }
 
 // Run is the function that runs all game logic

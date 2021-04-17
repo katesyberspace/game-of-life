@@ -23,10 +23,8 @@ func main() {
 		{16, 12}, {2, 30}, {2, 31}, {1, 30},
 		{0, 30}, {3, 29}, {3, 28},
 	}
-	if !game.ValidInputs(h, w, seeds) {
-		panic(fmt.Sprintf("invalid inputs h:%d, w:%d, seeds:%v", h, w, seeds))
-	}
-	g := game.NewGame(h, w, seeds)
+
+	g, _ := game.NewGame(h, w, seeds)
 	fmt.Println(boarder)
 	fmt.Print("Game of Life starting\nWarning! This is not the Milton Bradley board game.\nPress any key to spawn the next generation\n")
 	fmt.Println(boarder)
