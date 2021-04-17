@@ -51,6 +51,7 @@ Generation 2:
 And so on and so forth.
 
 ## Instructions for running
+`go run main.go`
 
 ### Docker
 - Install Docker from https://www.docker.com/products/docker-desktop
