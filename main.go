@@ -32,7 +32,7 @@ func getNumNeighors(h, w, y, x int, grid [][]int) (numNeighbors int) {
 
 // applies the Game of Life rules, to determine if cell should survive
 func survives(alive bool, numNeighbors int) bool {
-	return (alive && (2 <= numNeighbors || numNeighbors <= 3)) || (!alive && numNeighbors == 3)
+	return (alive && (numNeighbors == 2 || numNeighbors == 3)) || (!alive && numNeighbors == 3)
 }
 
 func (g *Game) printGrid() string {
@@ -120,8 +120,8 @@ func main() {
 		h, w  int
 		seeds [][2]int
 	)
-	h, w = 20, 20
-	seeds = [][2]int{{2, 4}, {1, 3}, {3, 4}, {4, 4}}
+	h, w = 20, 50
+	seeds = [][2]int{{10, 10}, {10, 11}, {10, 12}, {13, 12}, {13, 13}, {14, 13}, {18, 39}, {18, 40}, {18, 41}, {18, 42}, {15, 15}, {15, 16}, {15, 17}, {16, 17}, {17, 18}, {17, 19}}
 
 	g := NewGame(h, w, seeds)
 
