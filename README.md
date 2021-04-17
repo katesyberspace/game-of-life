@@ -31,8 +31,7 @@ The initial pattern constitutes the seed of the system. The first generation is 
 
 ## Example input:
 ```
-Grid size: 4,8
-Live cells: [2,5], [3,4], [3,5]
+Grid height, grid width, number of living cells to seed
 ```
 ## Expected output:
 Compute and display the next generation on any key press, and exit the program when the subsequent generation doesn't change/evolve or all cells are dead.
@@ -58,4 +57,4 @@ And so on and so forth.
 - Run `docker build .`
 
 ### Using your local setup:
-Install go, once done run `go test` in your game folder
+Install go, once done run `go test -v ./..` in your game folder

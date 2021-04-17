@@ -37,12 +37,13 @@ func NewGame(h, w, numSeeds int) (*Game, error) {
 	return g, nil
 }
 
-// ValidInputs checks the h, w and seeds provided
-// must be greater than 0, and seeds within h,w boarder
+// validInputs checks the h, w and numSeeds provided
+// must be greater than 0, and numSeeds within h,w area
 func validInputs(h, w, numSeeds int) bool {
 	return h > 0 && w > 0 && numSeeds > 0 && (numSeeds <= h*w)
 }
 
+// createSeeds creates the seed tuples from h,w & numSeeds
 func createSeeds(h, w, numSeeds int) [][2]int {
 	seeds := make([][2]int, numSeeds)
 	rand.Seed(time.Now().Unix())
