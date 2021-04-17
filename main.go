@@ -86,6 +86,7 @@ func (g *Game) createGrid() {
 }
 
 func (g *Game) run() string {
+	g.prevGenSeeds = g.seeds
 	g.seeds = nil
 	for y, row := range g.grid {
 		for x, cell := range row {
@@ -122,18 +123,21 @@ func main() {
 		seeds [][2]int
 	)
 	h, w = 20, 50
-	seeds = [][2]int{{10, 10}, {10, 11}, {10, 12}, {13, 12}, {13, 13}, {14, 13}, {18, 39}, {18, 40}, {18, 41}, {18, 42}, {15, 15}, {15, 16}, {15, 17}, {16, 17}, {17, 18}, {17, 19}}
+	seeds = [][2]int{{10, 11}, {10, 12}, {10, 13}, {11, 13}, {14, 13}, {15, 14}, {16, 14}, {15, 13}, {16, 12}}
 
 	g := NewGame(h, w, seeds)
 	for {
-		if len(g.seeds) == 0 || !g.hasEvolved() {
+		if g.noNewLife() || !g.hasEvolved() {
 			break
 		}
 		reader.ReadByte()
 		fmt.Print(g.run())
-		g.prevGenSeeds = g.seeds
 	}
 	fmt.Println("Game Over")
+}
+
+func (g *Game) noNewLife() bool {
+	return len(g.seeds) == 0
 }
 
 func (g *Game) hasEvolved() bool {
